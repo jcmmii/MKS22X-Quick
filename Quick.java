@@ -1,3 +1,5 @@
+import java.util.*;
+
 public class Quick {
 
   /*Choose a random pivot element between the start and end index inclusive,
@@ -15,12 +17,35 @@ public class Quick {
      int index = rng.nextInt(data.length+1);
      //extra while loop to make sure index is valid
 
+     //choosing a pivot using the median value of start,end, and the middle element
+     int middleIndex = data.length/2;
+     int middleVal = data[middleIndex];
+     int index = start;
 
-     //***** this might not be ideal *****
-     while (index < start || index > end) {
-          index = rng.nextInt(data.length+1);
-
+     if (start >= end && start >= middleVal) {
+       if (middleVal >= end) {
+         index = middleVal;
+       } else {
+         index = end;
+       }
      }
+
+     if (end >= start && end >= middleVal) {
+       if (start >= middleVal) {
+         index = start;
+       } else {
+         index = middleVal;
+       }
+     }
+
+     if (middleVal >= start && middleVal >= end) {
+       if (start >= end) {
+         index = start;
+       } else {
+         index = end;
+       }
+     }
+
      //the value of the index is the pivot element
      int pivot = data[index];
 
@@ -72,6 +97,20 @@ public class Quick {
       }
   }
 
-  
+  public static void quicksort(int[] data, int lo, int hi) {
+    if (low >= hi) return;
+    pivot = partition(data,lo,hi);
+    int firstHalfStart = lo;
+    int firstHalfEnd = pivot -1;
+    int secHalfStart = pivot +1;
+    int secHalfEnd = hi;
+    quicksort(data,firstHalfStart,firstHalfEnd);
+    quicksort(data,secHalfStart,secHalfEnd);
+  }
+
+  }
+
+
+
 
 }
