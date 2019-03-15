@@ -93,10 +93,25 @@ public class Quick {
 
 
     public static int quickselect(int[] data, int k) {
-
+      boolean solved = false;
+      int startIndex = 0;
+      int partitionIndex = partition(data,0,data.length-1);
+      while (!solved) {
+        if (partitionIndex==k) {
+          solved = true;
+        } else {
+          if (partitionIndex > k) {
+            partitionIndex = partition(data,startIndex,partitionIndex-1);
+          } else {
+            startIndex++;
+            partitionIndex = partition(data,startIndex,partition)
+          }
+        }
+      }
+      return data[partitionIndex];
     }
 
-    
+
     //modies array into increasing order (left to right)
     public static void quicksort(int[] data) {
       return quicksortHelp(data,0,data.length-1);
@@ -108,6 +123,9 @@ public class Quick {
       quicksortHelp(data,lo,pivotIndex-1);
       quicksortHelp(data,pivotIndex+1,hi);
     }
+
+
+
 
     public static String toString(int[] array) {
       String ret = "";
