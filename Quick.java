@@ -12,42 +12,36 @@ public class Quick {
    *@return the index of the final position of the pivot element.
    */
    public static int partition (int[] data, int start, int end) {
-     //chooses a random index from start to end (inclusive)
-     Random rng = new Random();
-     int index = rng.nextInt(data.length+1);
-     //extra while loop to make sure index is valid
-
      //choosing a pivot using the median value of start,end, and the middle element
      int middleIndex = data.length/2;
-     int middleVal = data[middleIndex];
+     //assuming small, medium, big
+     int med = data[middleIndex];
+     int small = data[start];
+     int big = data[end];
      int index = start;
 
-     if (start >= end && start >= middleVal) {
-       if (middleVal >= end) {
-         index = middleVal;
-       } else {
-         index = end;
-       }
+     //a mini sort, finds the median value of start, middle, and end elements
+     if (small > med) {
+       int temp = small;
+       small = med;
+       med = temp;
      }
 
-     if (end >= start && end >= middleVal) {
-       if (start >= middleVal) {
-         index = start;
-       } else {
-         index = middleVal;
-       }
+     if (med > big) {
+       int temp = med;
+       med = big;
+       big = temp;
      }
 
-     if (middleVal >= start && middleVal >= end) {
-       if (start >= end) {
-         index = start;
-       } else {
-         index = end;
-       }
+     if (small > med) {
+       int temp = small;
+       small = med;
+       med = temp;
      }
 
      //the value of the index is the pivot element
      int pivot = data[index];
+  //   System.out.println("PIVOT VALUE AND INDEX" + pivot + ", " + index);
 
      //swaps the starting index's value with the pivot value
      int temp = data[start];
@@ -62,11 +56,11 @@ public class Quick {
      //edgecase: when the original start == end, just return start(end can also work)
      if (tempS == end) return start;
 
+     Random rng2 = new Random();
      while (start != end) {
-      // int rando = rng.nextInt(2);
-
-       if (data[start] > pivot) { //|| (data[start] == pivot && rando == 1)) {
-        //for every time the start(+1) index is greater than the pivot element, swap with end value
+       Random rng = new Random();
+       if (data[start] > pivot || (data[start] == pivot && rng2.nextInt() %2 ==0)) { //|| (data[start] == pivot && rando == 1)) {
+        //for every time the start(+1) index element is greater than the pivot element, swap with end value
         //makes sure that all the bigger numbers are moved to the end
         //end moves back one so the big numbers are not replaced
         temp = data[start];
@@ -97,20 +91,30 @@ public class Quick {
       }
   }
 
-  public static void quicksort(int[] data, int lo, int hi) {
-    if (low >= hi) return;
-    pivot = partition(data,lo,hi);
-    int firstHalfStart = lo;
-    int firstHalfEnd = pivot -1;
-    int secHalfStart = pivot +1;
-    int secHalfEnd = hi;
-    quicksort(data,firstHalfStart,firstHalfEnd);
-    quicksort(data,secHalfStart,secHalfEnd);
-  }
+    public static void quicksort(int[] data, int lo, int hi) {
+      if (lo >= hi) return;
+      int pivot = partition(data,lo,hi);
+      int firstHalfStart = lo;
+      int firstHalfEnd = pivot -1;
+      int secHalfStart = pivot +1;
+      int secHalfEnd = hi;
+      quicksort(data,firstHalfStart,firstHalfEnd);
+      quicksort(data,secHalfStart,secHalfEnd);
+    }
+
+    public static String toString(int[] array) {
+      String ret = "";
+      for (int x = 0; x < array.length; x++) {
+        ret = ret + array[x] + " ";
+      }
+      return ret;
+    }
+
+    public static void main(String[] args) {
+      int[] test = {5,4,3,8,3,2};
+      System.out.println(toString(test));
+      System.out.println(partition(test,0,5));
+      System.out.println(toString(test));
+    }
 
   }
-
-
-
-
-}
