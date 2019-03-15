@@ -41,7 +41,7 @@ public class Quick {
 
      //the value of the index is the pivot element
      int pivot = data[index];
-  //   System.out.println("PIVOT VALUE AND INDEX" + pivot + ", " + index);
+     //System.out.println("PIVOT VALUE AND INDEX" + pivot + ", " + index);
 
      //swaps the starting index's value with the pivot value
      int temp = data[start];
@@ -89,17 +89,24 @@ public class Quick {
         data[tempS] = temp;
         return start-1;
       }
-  }
+    }
 
-    public static void quicksort(int[] data, int lo, int hi) {
+
+    public static int quickselect(int[] data, int k) {
+
+    }
+
+    
+    //modies array into increasing order (left to right)
+    public static void quicksort(int[] data) {
+      return quicksortHelp(data,0,data.length-1);
+
+    }
+    public static void quicksortHelp(int[] data, int lo, int hi) {
       if (lo >= hi) return;
-      int pivot = partition(data,lo,hi);
-      int firstHalfStart = lo;
-      int firstHalfEnd = pivot -1;
-      int secHalfStart = pivot +1;
-      int secHalfEnd = hi;
-      quicksort(data,firstHalfStart,firstHalfEnd);
-      quicksort(data,secHalfStart,secHalfEnd);
+      int pivotIndex = partition(data,lo,hi);
+      quicksortHelp(data,lo,pivotIndex-1);
+      quicksortHelp(data,pivotIndex+1,hi);
     }
 
     public static String toString(int[] array) {
