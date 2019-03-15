@@ -17,12 +17,10 @@ public class Quick {
 
      //the value of the index is the pivot element
      int pivot = data[index];
-     //System.out.println("PIVOT VALUE AND INDEX" + pivot + ", " + index);
 
      //swaps the starting index's value with the pivot value
-     int temp = data[start];
+     data[index] = data[start];
      data[start] = pivot;
-     data[index] = temp;
 
      //holds original starting index
      int tempS = start;
@@ -32,38 +30,40 @@ public class Quick {
      //edgecase: when the original start == end, just return start(end can also work)
      if (tempS == end) return start;
 
-     Random rng2 = new Random();
+     Random rng = new Random();
      while (start != end) {
-       if (data[start] > pivot || (data[start] == pivot && rng2.nextInt() %2 ==0)) { //|| (data[start] == pivot && rando == 1)) {
+       int val = data[start];
+       if (val > pivot) { //|| (data[start] == pivot && rando == 1)) {
         //for every time the start(+1) index element is greater than the pivot element, swap with end value
         //makes sure that all the bigger numbers are moved to the end
         //end moves back one so the big numbers are not replaced
-        temp = data[start];
         data[start] = data[end];
-        data[end] = temp;
+        data[end] = val;
         end = end -1;
+      } else if (val == pivot) {
+        //in the case that val is equal, 50% chance to keep it in place, 50% chance to move to back
+        int hold = Math.abs(rng.nextInt()) % 2;
+        if (hold == 0) {
+          start++;
+        } else {
+          data[start] = data[end];
+          data[end] = val;
+          end--;
+        }
       } else {
-        //when the number isn't greater but smaller, keep where it is
+        //when the number is smaller, keep where it is
         start=start+1;
+        }
       }
-    }
       //at this point start == end
-      if (data[start] < pivot) {
-        //if the pivot is greater than the value of data[start], swaps
-        //the pivot will then take the index - every left should be less, everything right should be greater
-        temp = data[tempS];
-        data[tempS] = data[start];
-        data[start] = temp;
-        return start;
-      } else {
-        //this means data[start] > pivot value
-        //BUT at this point this can only mean that the data[start] is on the right side of the pivot
-        //so, go back one index and swap, setting that index to pivot
-        temp = data[start-1];
-        data[start-1] = data[tempS];
-        data[tempS] = temp;
-        return start-1;
+      //if the current start/end index element is greater than pivot, moves to the left once
+      if (data[start] > pivot) {
+          start--;
       }
+      //swaps and places pivot back
+      data[tempS] = data[start];
+      data[start] = pivot;
+      return start;
     }
 
 
@@ -73,13 +73,16 @@ public class Quick {
 
     public static int quickselectHelp(int[] data, int k,int start,int end) {
       int partitionIndex = partition(data,start,end);
-      if (partitionIndex > k) {
-        return quickselectHelp(data,k,start,partitionIndex-1);
+      while (partitionIndex != k) {
+        if (partitionIndex < k) {
+          start = partitionIndex +1;
+          partitionIndex = partition(data,start,end);
+        } else {
+          end = partitionIndex -1;
+          partitionIndex = partition(data,start,end);
+        }
       }
-      if (partitionIndex < k) {
-        return quickselectHelp(data,k,partitionIndex+1,end);
-      }
-      return data[k];
+      return data[partitionIndex];
     }
 
 
@@ -95,6 +98,8 @@ public class Quick {
       quicksortHelp(data,pivotIndex+1,hi);
     }
 
+
+    //helper method that finds median
     private static int median(int[] data, int start, int end) {
       int mid = data.length/2;
       if (data[start] >= data[mid] && data[start] <= data[end]) {
