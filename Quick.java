@@ -13,31 +13,7 @@ public class Quick {
    */
    public static int partition (int[] data, int start, int end) {
      //choosing a pivot using the median value of start,end, and the middle element
-     int middleIndex = data.length/2;
-     //assuming small, medium, big
-     int med = data[middleIndex];
-     int small = data[start];
-     int big = data[end];
-     int index = start;
-
-     //a mini sort, finds the median value of start, middle, and end elements
-     if (small > med) {
-       int temp = small;
-       small = med;
-       med = temp;
-     }
-
-     if (med > big) {
-       int temp = med;
-       med = big;
-       big = temp;
-     }
-
-     if (small > med) {
-       int temp = small;
-       small = med;
-       med = temp;
-     }
+     int index = median(data,start,end);
 
      //the value of the index is the pivot element
      int pivot = data[index];
@@ -58,7 +34,6 @@ public class Quick {
 
      Random rng2 = new Random();
      while (start != end) {
-       Random rng = new Random();
        if (data[start] > pivot || (data[start] == pivot && rng2.nextInt() %2 ==0)) { //|| (data[start] == pivot && rando == 1)) {
         //for every time the start(+1) index element is greater than the pivot element, swap with end value
         //makes sure that all the bigger numbers are moved to the end
@@ -93,28 +68,24 @@ public class Quick {
 
 
     public static int quickselect(int[] data, int k) {
-      boolean solved = false;
-      int startIndex = 0;
-      int partitionIndex = partition(data,0,data.length-1);
-      while (!solved) {
-        if (partitionIndex==k) {
-          solved = true;
-        } else {
-          if (partitionIndex > k) {
-            partitionIndex = partition(data,startIndex,partitionIndex-1);
-          } else {
-            startIndex++;
-            partitionIndex = partition(data,startIndex,partition)
-          }
-        }
+      return quickselectHelp(data,k,0,data.length-1);
+    }
+
+    public static int quickselectHelp(int[] data, int k,int start,int end) {
+      int partitionIndex = partition(data,start,end);
+      if (partitionIndex > k) {
+        return quickselectHelp(data,k,start,partitionIndex-1);
       }
-      return data[partitionIndex];
+      if (partitionIndex < k) {
+        return quickselectHelp(data,k,partitionIndex+1,end);
+      }
+      return data[k];
     }
 
 
     //modies array into increasing order (left to right)
     public static void quicksort(int[] data) {
-      return quicksortHelp(data,0,data.length-1);
+      quicksortHelp(data,0,data.length-1);
 
     }
     public static void quicksortHelp(int[] data, int lo, int hi) {
@@ -124,8 +95,21 @@ public class Quick {
       quicksortHelp(data,pivotIndex+1,hi);
     }
 
-
-
+    private static int median(int[] data, int start, int end) {
+      int mid = data.length/2;
+      if (data[start] >= data[mid] && data[start] <= data[end]) {
+        return start;
+      } else if (data[start] >= data[end] && data[start] <= data[mid]) {
+          return start;
+          }
+        else if (data[mid] <= data[end] && data[mid] >= data[start]) {
+          return mid;
+        }
+        else if (data[mid] >= data[end] && data[mid] <= data[start]) {
+          return mid;
+        }
+        else return end;
+    }
 
     public static String toString(int[] array) {
       String ret = "";
