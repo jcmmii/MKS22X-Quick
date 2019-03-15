@@ -12,7 +12,7 @@ public class Quick {
    */
    public static int partition (int[] data, int start, int end) {
      //choosing a pivot using the median value of start,end, and the middle element
-     int index = median(data,start,end);
+     int index = findMedian(data,start,end);
 
      //the value of the index is the pivot element
      int pivot = data[index];
@@ -69,10 +69,10 @@ public class Quick {
 
 
     public static int quickselect(int[] data, int k) {
-      return quickselectHelp(data,k,0,data.length-1);
+      return quickselectH(data,k,0,data.length-1);
     }
 
-    public static int quickselectHelp(int[] data, int k,int start,int end) {
+    public static int quickselectH(int[] data, int k,int start,int end) {
       int partitionIndex = partition(data,start,end);
       while (partitionIndex != k) {
        if (partitionIndex < k) {
@@ -89,18 +89,18 @@ public class Quick {
 
     //modies array into increasing order (left to right)
     public static void quicksort(int[] data) {
-      quicksortHelp(data,0,data.length-1);
+      quicksortH(data,0,data.length-1);
 
     }
-    public static void quicksortHelp(int[] data, int lo, int hi) {
+    public static void quicksortH(int[] data, int lo, int hi) {
       if (lo >= hi) return;
       int pivotIndex = partition(data,lo,hi);
-      quicksortHelp(data,lo,pivotIndex-1);
-      quicksortHelp(data,pivotIndex+1,hi);
+      quicksortH(data,lo,pivotIndex-1);
+      quicksortH(data,pivotIndex+1,hi);
     }
 
     //helper method that finds median
-    private static int median(int[] data, int start, int end) {
+    private static int findMedian(int[] data, int start, int end) {
       int mid = (start+end)/2;
       if ((data[start] <= data[end] && data[start] >= data[mid]) || (data[start] >= data[end] && data[start] <= data[mid])) {
         return start;
@@ -127,5 +127,5 @@ public class Quick {
       System.out.println(toString(test));
     }
   */
-  
+
   }
