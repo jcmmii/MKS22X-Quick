@@ -23,47 +23,45 @@ public class Quick {
      data[start] = pivot;
 
      //holds original starting index
-     int tempS = start;
-
-     start = start + 1;
+     int startCount = start;
 
      //edgecase: when the original start == end, just return start(end can also work)
-     if (tempS == end) return start;
+     if (startCount == end) return start;
 
      Random rng = new Random();
-     while (start != end) {
-       int val = data[start];
-       if (val > pivot) { //|| (data[start] == pivot && rando == 1)) {
+     while (startCount < end) {
+       int val = data[startCount];
+       if (val < pivot || startCount == start) {
+         //when the number is smaller, keep where it is
+         startCount=startCount+1;
+       } else if (val > pivot) { //|| (data[start] == pivot && rando == 1)) {
         //for every time the start(+1) index element is greater than the pivot element, swap with end value
         //makes sure that all the bigger numbers are moved to the end
         //end moves back one so the big numbers are not replaced
-        data[start] = data[end];
+        data[startCount] = data[end];
         data[end] = val;
         end = end -1;
-      } else if (val == pivot) {
+      } else {
         //in the case that val is equal, 50% chance to keep it in place, 50% chance to move to back
         int hold = Math.abs(rng.nextInt()) % 2;
         if (hold == 0) {
-          start++;
+          startCount++;
         } else {
-          data[start] = data[end];
+          data[startCount] = data[end];
           data[end] = val;
           end--;
         }
-      } else {
-        //when the number is smaller, keep where it is
-        start=start+1;
-        }
+      }
       }
       //at this point start == end
       //if the current start/end index element is greater than pivot, moves to the left once
-      if (data[start] > pivot) {
-          start--;
+      if (data[startCount] > pivot) {
+          startCount--;
       }
       //swaps and places pivot back
-      data[tempS] = data[start];
-      data[start] = pivot;
-      return start;
+      data[start] = data[startCount];
+      data[startCount] = pivot;
+      return startCount;
     }
 
 
