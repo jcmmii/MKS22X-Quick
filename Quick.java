@@ -17,51 +17,53 @@ public class Quick {
 
      //the value of the index is the pivot element
      int pivot = data[index];
+     //System.out.println("PIVOT VALUE AND INDEX" + pivot + ", " + index);
 
      //swaps the starting index's value with the pivot value
-     data[index] = data[start];
+     int temp = data[start];
      data[start] = pivot;
+     data[index] = temp;
 
      //holds original starting index
-     int startCount = start;
+     int tempS = start;
+
+     start = start + 1;
 
      //edgecase: when the original start == end, just return start(end can also work)
-     if (startCount == end) return start;
+     if (tempS == end) return start;
 
-     Random rng = new Random();
-     while (startCount < end) {
-       int val = data[startCount];
-       if (val < pivot || startCount == start) {
-         //when the number is smaller, keep where it is
-         startCount=startCount+1;
-       } else if (val > pivot) { //|| (data[start] == pivot && rando == 1)) {
+     Random rng2 = new Random();
+     while (start != end) {
+       if (data[start] > pivot || (data[start] == pivot && rng2.nextInt() %2 ==0)) { //|| (data[start] == pivot && rando == 1)) {
         //for every time the start(+1) index element is greater than the pivot element, swap with end value
         //makes sure that all the bigger numbers are moved to the end
         //end moves back one so the big numbers are not replaced
-        data[startCount] = data[end];
-        data[end] = val;
+        temp = data[start];
+        data[start] = data[end];
+        data[end] = temp;
         end = end -1;
       } else {
-        //in the case that val is equal, 50% chance to keep it in place, 50% chance to move to back
-        int hold = Math.abs(rng.nextInt()) % 2;
-        if (hold == 0) {
-          startCount++;
-        } else {
-          data[startCount] = data[end];
-          data[end] = val;
-          end--;
-        }
+        //when the number isn't greater but smaller, keep where it is
+        start=start+1;
       }
-      }
+    }
       //at this point start == end
-      //if the current start/end index element is greater than pivot, moves to the left once
-      if (data[startCount] > pivot) {
-          startCount--;
+      if (data[start] < pivot) {
+        //if the pivot is greater than the value of data[start], swaps
+        //the pivot will then take the index - every left should be less, everything right should be greater
+        temp = data[tempS];
+        data[tempS] = data[start];
+        data[start] = temp;
+        return start;
+      } else {
+        //this means data[start] > pivot value
+        //BUT at this point this can only mean that the data[start] is on the right side of the pivot
+        //so, go back one index and swap, setting that index to pivot
+        temp = data[start-1];
+        data[start-1] = data[tempS];
+        data[tempS] = temp;
+        return start-1;
       }
-      //swaps and places pivot back
-      data[start] = data[startCount];
-      data[startCount] = pivot;
-      return startCount;
     }
 
 
@@ -71,16 +73,13 @@ public class Quick {
 
     public static int quickselectHelp(int[] data, int k,int start,int end) {
       int partitionIndex = partition(data,start,end);
-      while (partitionIndex != k) {
-        if (partitionIndex < k) {
-          start = partitionIndex +1;
-          partitionIndex = partition(data,start,end);
-        } else {
-          end = partitionIndex -1;
-          partitionIndex = partition(data,start,end);
-        }
+      if (partitionIndex > k) {
+        return quickselectHelp(data,k,start,partitionIndex-1);
       }
-      return data[partitionIndex];
+      if (partitionIndex < k) {
+        return quickselectHelp(data,k,partitionIndex+1,end);
+      }
+      return data[k];
     }
 
 
@@ -96,8 +95,6 @@ public class Quick {
       quicksortHelp(data,pivotIndex+1,hi);
     }
 
-
-    //helper method that finds median
     private static int median(int[] data, int start, int end) {
       int mid = data.length/2;
       if (data[start] >= data[mid] && data[start] <= data[end]) {
