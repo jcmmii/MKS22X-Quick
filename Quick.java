@@ -119,12 +119,13 @@ public class Quick {
       return ret;
     }
 
+/*
     public static void main(String[] args) {
       int[] test = {5,4,3,8,3,2};
       System.out.println(toString(test));
       System.out.println(partition(test,0,5));
       System.out.println(toString(test));
     }
+  */
   
-
   }
