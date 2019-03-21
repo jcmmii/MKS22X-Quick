@@ -1,6 +1,20 @@
 import java.util.*;
 
 public class Quick {
+
+  //insertionSort: modified so that it works on a subarray
+  public static void insertionSort(int data[],int lo, int hi) {
+    for (int x = lo + 1; x <= hi; x++) {
+      int index = x;
+      int temp = data[x];
+      while (index -1 >= 0 && temp < data[index-1]) {
+        data[index] = data[index-1];
+        index--;
+      }
+      data[index] = temp;
+    }
+  }
+
   /*Choose a random pivot element between the start and end index inclusive,
    Then modify the array such that:
    *1. Only the indices from start to end inclusive are considered in range
@@ -93,10 +107,13 @@ public class Quick {
 
     }
     public static void quicksortH(int[] data, int lo, int hi) {
-      if (lo >= hi) return;
-      int pivotIndex = partition(data,lo,hi);
-      quicksortH(data,lo,pivotIndex-1);
-      quicksortH(data,pivotIndex+1,hi);
+      if (hi - lo <= 40) {
+        insertionSort(data,lo,hi);
+        return;
+      } //else:
+        int pivotIndex = partition(data,lo,hi);
+        quicksortH(data,lo,pivotIndex-1);
+        quicksortH(data,pivotIndex+1,hi);
     }
 
     //helper method that finds median
